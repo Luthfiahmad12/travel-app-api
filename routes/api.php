@@ -10,7 +10,7 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/', function () {
     return response()->json([
-        'message' => 'welcome to laravel api travel app'
+        'message' => 'welcome to travel app api'
     ], 200);
 });
 

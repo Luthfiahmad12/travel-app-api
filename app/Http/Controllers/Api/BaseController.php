@@ -16,7 +16,7 @@ class BaseController extends Controller
         return response()->json($response, 200);
     }
 
-    public function ErrorResponse($error, $errorMessages, $code = 404)
+    public function ErrorResponse($error, $errorMessages = [], $code = 404)
     {
         $response = [
             'success' => false,

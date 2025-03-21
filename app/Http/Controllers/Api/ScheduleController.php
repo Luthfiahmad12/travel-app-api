@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreScheduleRequest;
 use App\Http\Requests\UpdateScheduleRequest;
 use App\Http\Resources\ScheduleResource;
@@ -41,9 +40,10 @@ class ScheduleController extends BaseController
     public function store(StoreScheduleRequest $request)
     {
         $data = $request->validated();
-
+        if (!$data) {
+            return $this->ErrorResponse('Invalid data provided', null, 400);
+        }
         $result = $this->scheduleService->create($data);
-
         return $this->SuccessResponse(new ScheduleResource($result), 'create data successfully');
     }
 

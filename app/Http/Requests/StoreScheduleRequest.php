@@ -48,4 +48,13 @@ class StoreScheduleRequest extends FormRequest
             'price.min' => 'Harga minimal Rp 0.',
         ];
     }
+
+    public function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        throw new \Illuminate\Http\Exceptions\HttpResponseException(response()->json([
+            'success' => false,
+            'message' => 'Validation errors',
+            'data'    => $validator->errors()
+        ], 422));
+    }
 }
