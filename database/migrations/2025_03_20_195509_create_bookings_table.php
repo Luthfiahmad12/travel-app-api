@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('passenger_id')->constrained('passengers')->cascadeOnDelete();
             $table->integer('seat_number');
             $table->decimal('total_price', 10, 2);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

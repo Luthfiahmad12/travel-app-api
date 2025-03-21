@@ -13,13 +13,14 @@ class ScheduleRepository implements ScheduleRepositoryInterface
         return Schedule::all();
     }
 
-    public function create(array $data): ?Schedule
+    public function create(array $data)
     {
         return Schedule::create($data);
     }
 
     public function update(array $data, ?Schedule $schedule)
     {
+
         return $schedule->update($data);
     }
 
@@ -28,7 +29,7 @@ class ScheduleRepository implements ScheduleRepositoryInterface
         return $schedule->delete();
     }
 
-    public function find(?Schedule $schedule): ?Schedule
+    public function find(?Schedule $schedule)
     {
         return $schedule;
     }

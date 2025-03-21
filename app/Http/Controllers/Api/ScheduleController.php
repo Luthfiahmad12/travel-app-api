@@ -9,7 +9,7 @@ use App\Http\Resources\ScheduleResource;
 use App\Models\Schedule;
 use App\Services\ScheduleService;
 
-class ScheduleController extends Controller
+class ScheduleController extends BaseController
 {
 
     public function __construct(protected ScheduleService $scheduleService)
@@ -23,7 +23,8 @@ class ScheduleController extends Controller
     {
         $schedules = $this->scheduleService->all();
 
-        return ScheduleResource::collection($schedules);
+        // return ScheduleResource::collection($schedules);
+        return $this->SuccessResponse(ScheduleResource::collection($schedules), 'Lists travel package');
     }
 
     /**
@@ -41,9 +42,9 @@ class ScheduleController extends Controller
     {
         $data = $request->validated();
 
-        $this->scheduleService->create($data);
+        $result = $this->scheduleService->create($data);
 
-        return ScheduleResource::collection($data);
+        return $this->SuccessResponse(new ScheduleResource($result), 'create data successfully');
     }
 
     /**
@@ -51,7 +52,9 @@ class ScheduleController extends Controller
      */
     public function show(Schedule $schedule)
     {
-        //
+        $this->scheduleService->find($schedule);
+
+        return $this->SuccessResponse(new ScheduleResource($schedule), 'show data successfully');
     }
 
     /**
@@ -71,7 +74,7 @@ class ScheduleController extends Controller
 
         $this->scheduleService->update($data, $schedule);
 
-        return ScheduleResource::collection($data);
+        return $this->SuccessResponse(new ScheduleResource($schedule), 'update data successfully');
     }
 
     /**
@@ -80,5 +83,7 @@ class ScheduleController extends Controller
     public function destroy(Schedule $schedule)
     {
         $this->scheduleService->delete($schedule);
+
+        return $this->SuccessResponse(new ScheduleResource($schedule), 'delete data successfully');
     }
 }

@@ -13,31 +13,20 @@ class ScheduleSeeder extends Seeder
      */
     public function run(): void
     {
-        Schedule::insert([
-            [
-                'travel_name' => 'Travel A',
-                'departure_time' => '2025-04-01 08:00:00',
-                'quota' => 10,
-                'price' => 75000,
+
+        $schedules = [];
+        $times = ['08:00:00', '10:00:00', '14:00:00', '16:00:00'];
+        for ($i = 1; $i < 11; $i++) {
+            $schedules[] = [
+                'travel_name' => "Travel $i", // Nama travel berbeda berdasarkan iterasi
+                'departure_time' => now()->addDays($i)->format('Y-m-d') . ' ' . $times[$i % count($times)],
+                'quota' => 10, // Kuota penumpang diacak antara 15 hingga 30
+                'price' => rand(80000, 120000), // Harga tiket diacak antara 80.000 hingga 120.000
                 'created_at' => now(),
                 'updated_at' => now(),
-            ],
-            [
-                'travel_name' => 'Travel B',
-                'departure_time' => '2025-04-02 09:30:00',
-                'quota' => 15,
-                'price' => 85000,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'travel_name' => 'Travel C',
-                'departure_time' => '2025-04-03 14:00:00',
-                'quota' => 20,
-                'price' => 95000,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ]);
+            ];
+        }
+
+        Schedule::insert($schedules);
     }
 }

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->dateTime('departure_time');
             $table->integer('quota');
             $table->decimal('price', 10, 2);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

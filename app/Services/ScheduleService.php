@@ -18,8 +18,9 @@ class ScheduleService
         return $this->scheduleRepository->all();
     }
 
-    public function create(array $data): Schedule
+    public function create(array $data)
     {
+        $data['quota'] = 10;
         return $this->scheduleRepository->create($data);
     }
 
@@ -33,7 +34,7 @@ class ScheduleService
         $this->scheduleRepository->delete($schedule);
     }
 
-    public function find(?Schedule $schedule): ?Schedule
+    public function find(?Schedule $schedule)
     {
         return $this->scheduleRepository->find($schedule);
     }

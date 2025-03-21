@@ -11,7 +11,7 @@ Route::get('/user', function (Request $request) {
 Route::get('/', function () {
     return response()->json([
         'message' => 'welcome to laravel api travel app'
-    ]);
+    ], 200);
 });
 
 Route::apiResource('/schedules', ScheduleController::class);

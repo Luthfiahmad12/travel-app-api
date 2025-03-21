@@ -21,6 +21,7 @@ class ScheduleResource extends JsonResource
             'quota' => $this->quota,
             'price' => $this->price,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
+            'deleted_at' => $this->deleted_at?->format('Y-m-d H:i:s'),
         ];
     }
 }

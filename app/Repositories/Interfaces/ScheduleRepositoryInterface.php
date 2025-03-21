@@ -8,11 +8,11 @@ interface ScheduleRepositoryInterface
 {
     public function all(): \Illuminate\Database\Eloquent\Collection;
 
-    public function create(array $data): ?Schedule;
+    public function create(array $data);
 
     public function update(array $data, ?Schedule $schedule);
 
     public function delete(?Schedule $schedule): bool;
 
-    public function find(?Schedule $schedule): ?Schedule;
+    public function find(?Schedule $schedule);
 }
