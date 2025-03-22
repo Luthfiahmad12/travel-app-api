@@ -3,11 +3,12 @@
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 if (!function_exists('throwError')) {
-    function throwErrorResponse(string $message, int $statusCode = 500)
+    function throwErrorResponse(string $message, ?object $data, int $statusCode = 500)
     {
         throw new HttpResponseException(response()->json([
             'success' => false,
-            'message' => $message
+            'message' => $message,
+            'data' => $data
         ], $statusCode));
     }
 }
