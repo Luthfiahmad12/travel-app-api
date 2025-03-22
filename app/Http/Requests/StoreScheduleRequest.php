@@ -24,7 +24,7 @@ class StoreScheduleRequest extends FormRequest
         return [
             'travel_name' => 'required|string|max:255',
             'departure_time' => 'required|date',
-            'quota' => 'required|integer|min:1',
+            'quota' => 'nullable|integer|min:1',
             'price' => 'required|numeric|min:0',
         ];
     }
@@ -39,7 +39,6 @@ class StoreScheduleRequest extends FormRequest
             'departure_time.required' => 'Tanggal dan waktu keberangkatan wajib diisi.',
             'departure_time.date' => 'Format tanggal keberangkatan tidak valid.',
 
-            'quota.required' => 'Kuota penumpang wajib diisi.',
             'quota.integer' => 'Kuota harus berupa angka.',
             'quota.min' => 'Kuota minimal 1.',
 
