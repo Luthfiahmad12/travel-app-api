@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Http\Resources\PassengerResource;
 use App\Http\Resources\UserResource;
+use App\Models\Passenger;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -25,9 +27,15 @@ class AuthService
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
+        $passenger = new Passenger();
+        $passenger->name = $data['name'];
+        $passenger->phone_number = $data['phone_number'];
+        $passenger->user_id = $user->id;
+        $passenger->save;
+
         return [
             'token' => $token,
-            'user' => new UserResource($user),
+            'user' => new PassengerResource($passenger),
             'redirect_url' => '/dashboard',
         ];
     }
