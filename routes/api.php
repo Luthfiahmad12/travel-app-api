@@ -15,7 +15,7 @@ Route::get('/', function () {
     ], 200);
 });
 
-Route::apiResource('/schedules', ScheduleController::class);
+Route::apiResource('/schedules', ScheduleController::class)->middleware(['auth:sanctum', 'admin']);
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
