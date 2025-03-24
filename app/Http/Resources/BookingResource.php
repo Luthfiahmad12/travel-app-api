@@ -17,6 +17,7 @@ class BookingResource extends JsonResource
         return [
             'id' => $this->id,
             'qty' => $this->qty,
+            'schedule_id' => $this->schedule_id,
             'total_price' => $this->total_price,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
             'deleted_at' => $this->deleted_at?->format('Y-m-d H:i:s'),

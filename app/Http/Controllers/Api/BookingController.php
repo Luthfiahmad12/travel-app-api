@@ -100,9 +100,8 @@ class BookingController extends BaseController
      */
     public function destroy(Booking $booking)
     {
-        $result = $this->bookingService->delete($booking);
+        $this->bookingService->delete($booking);
         return $this->SuccessResponse(
-            new BookingResource($result),
             'delete data booking with id ' . $booking->id,
             200
         );

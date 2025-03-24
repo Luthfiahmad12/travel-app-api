@@ -21,7 +21,7 @@ class BookingService
     {
         $data =  $this->bookingRepository->getData();
 
-        return $data->load('passenger', 'transaction');
+        return $data->load('schedule', 'passenger', 'transaction');
     }
 
     public function getDataByPassenger()
