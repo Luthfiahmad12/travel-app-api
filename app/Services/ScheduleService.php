@@ -36,6 +36,6 @@ class ScheduleService
 
     public function find(?Schedule $schedule)
     {
-        return $this->scheduleRepository->find($schedule);
+        return $this->scheduleRepository->findById($schedule->id);
     }
 }

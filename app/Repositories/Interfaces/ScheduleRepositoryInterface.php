@@ -14,5 +14,5 @@ interface ScheduleRepositoryInterface
 
     public function delete(?Schedule $schedule): bool;
 
-    public function find(?Schedule $schedule);
+    public function findById(int $id): ?Schedule;
 }

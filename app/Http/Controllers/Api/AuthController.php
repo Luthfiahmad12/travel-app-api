@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Models\User;
 use App\Services\AuthService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
@@ -26,5 +27,11 @@ class AuthController extends BaseController
     {
         $result = $this->authService->register($request->validated());
         return $this->SuccessResponse($result, 'register successfully', 200);
+    }
+
+    public function logout(?User $user)
+    {
+        $result = $this->authService->logout($user);
+        return $this->SuccessResponse($result, 'logout successfully', 200);
     }
 }

@@ -2,19 +2,45 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
+use App\Http\Resources\BookingResource;
 use App\Models\Booking;
+use App\Repositories\ScheduleRepository;
+use App\Services\BookingService;
+use Illuminate\Support\Facades\Auth;
 
-class BookingController extends Controller
+class BookingController extends BaseController
 {
+
+    public function __construct(protected BookingService $bookingService)
+    {
+        //
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $result = $this->bookingService->getAllData();
+
+        return $this->SuccessResponse(
+            BookingResource::collection($result),
+            'get all data booking',
+            200
+        );
+    }
+
+    public function getDataByPassenger()
+    {
+
+        $result = $this->bookingService->getDataByPassenger();
+
+        return $this->SuccessResponse(
+            BookingResource::collection($result),
+            'get all data booking by passenger ' . Auth::user()->passenger->name,
+            200
+        );
     }
 
     /**
@@ -30,7 +56,13 @@ class BookingController extends Controller
      */
     public function store(StoreBookingRequest $request)
     {
-        //
+        $result = $this->bookingService->create($request->validated());
+
+        return $this->SuccessResponse(
+            new BookingResource($result),
+            'Create booking successfully',
+            200
+        );
     }
 
     /**
@@ -38,7 +70,13 @@ class BookingController extends Controller
      */
     public function show(Booking $booking)
     {
-        //
+        $result = $this->bookingService->show($booking->id);
+
+        return $this->SuccessResponse(
+            new BookingResource($result),
+            'show detail booking with id ' . $booking->id,
+            200
+        );
     }
 
     /**
@@ -62,6 +100,11 @@ class BookingController extends Controller
      */
     public function destroy(Booking $booking)
     {
-        //
+        $result = $this->bookingService->delete($booking);
+        return $this->SuccessResponse(
+            new BookingResource($result),
+            'delete data booking with id ' . $booking->id,
+            200
+        );
     }
 }

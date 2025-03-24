@@ -12,35 +12,6 @@ use Illuminate\Support\Facades\Hash;
 class AuthService
 {
     /**
-     * Register a new user
-     *
-     * @param array $data
-     * @return User
-     */
-    public function register(array $data)
-    {
-        $user = new User();
-        $user->name = $data['name'];
-        $user->email = $data['email'];
-        $user->password = Hash::make($data['password']);
-        $user->save();
-
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        $passenger = new Passenger();
-        $passenger->name = $data['name'];
-        $passenger->phone_number = $data['phone_number'];
-        $passenger->user_id = $user->id;
-        $passenger->save;
-
-        return [
-            'token' => $token,
-            'user' => new PassengerResource($passenger),
-            'redirect_url' => '/dashboard',
-        ];
-    }
-
-    /**
      * Login user and generate token
      *
      * @param array $data
@@ -56,7 +27,8 @@ class AuthService
                 'message' => 'Unauthorized'
             ], 401);
         }
-        $user = User::where('email', $credentials['email'])->first();
+        $user = User::with('passenger')->where('email', $credentials['email'])->first();
+
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -65,6 +37,35 @@ class AuthService
             'user' => new UserResource($user),
             'redirect_url' => $user->role === 'admin' ? 'admin/dashboard' : '/dashboard',
 
+        ];
+    }
+
+    /**
+     * Register a new user
+     *
+     * @param array $data
+     * @return User
+     */
+    public function register(array $data)
+    {
+        $user = new User();
+        $user->name = $data['name'];
+        $user->email = $data['email'];
+        $user->password = Hash::make($data['password']);
+        $user->save();
+
+        $passenger = new Passenger();
+        $passenger->name = $data['name'];
+        $passenger->phone_number = $data['phone_number'];
+        $passenger->user_id = $user->id;
+        $passenger->save();
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return [
+            'token' => $token,
+            'user' => new UserResource($user->load('passenger')),
+            'redirect_url' => '/dashboard',
         ];
     }
 

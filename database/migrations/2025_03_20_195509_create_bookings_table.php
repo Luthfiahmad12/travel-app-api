@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('schedule_id')->constrained('schedules')->cascadeOnDelete();
-            $table->foreignId('passenger_id')->constrained('passengers')->cascadeOnDelete();
-            $table->integer('seat_number');
+            $table->foreignId('passenger_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('schedule_id')->constrained()->cascadeOnDelete();
+            $table->integer('qty');
             $table->decimal('total_price', 10, 2);
             $table->softDeletes();
             $table->timestamps();

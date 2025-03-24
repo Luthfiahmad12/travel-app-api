@@ -11,7 +11,7 @@ class StoreBookingRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,14 @@ class StoreBookingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'passenger_id' => 'required|exists:passengers,id',
+            'schedule_id' => 'required|exists:schedules,id',
+            'qty' => 'required|numeric|min:1',
         ];
+    }
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        throwErrorResponse('Validation errors', $validator->errors(), 422);
     }
 }

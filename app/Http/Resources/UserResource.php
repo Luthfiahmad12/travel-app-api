@@ -20,6 +20,7 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'created_at' => $this->created_at,
             'deleted_at' => $this->deleted_at,
+            'passenger' => new PassengerResource($this->whenLoaded('passenger')),
         ];
     }
 }

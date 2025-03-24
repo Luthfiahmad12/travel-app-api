@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\ScheduleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -15,11 +16,13 @@ Route::get('/', function () {
     ], 200);
 });
 
-Route::apiResource('/schedules', ScheduleController::class)->middleware(['auth:sanctum', 'admin']);
+Route::apiResource('/schedules', ScheduleController::class)->middleware('auth:sanctum');
+Route::apiResource('/bookings', BookingController::class)->middleware('auth:sanctum');
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('logout', [AuthController::class, 'logout']);
+    Route::get('logout/{user}', [AuthController::class, 'logout']);
+    Route::get('booking/getdatabypassenger', [BookingController::class, 'getDataByPassenger']);
 });

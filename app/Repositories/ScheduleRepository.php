@@ -29,8 +29,8 @@ class ScheduleRepository implements ScheduleRepositoryInterface
         return $schedule->delete();
     }
 
-    public function find(?Schedule $schedule)
+    public function findById(int $id): ?Schedule
     {
-        return $schedule;
+        return Schedule::findOrFail($id);
     }
 }

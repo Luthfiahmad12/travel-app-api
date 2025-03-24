@@ -13,7 +13,7 @@ class Booking extends Model
     protected $fillable = [
         'schedule_id',
         'passenger_id',
-        'seat_number',
+        'qty',
         'total_price',
     ];
 
@@ -25,5 +25,10 @@ class Booking extends Model
     public function passenger()
     {
         return $this->belongsTo(Passenger::class);
+    }
+
+    public function transaction()
+    {
+        return $this->hasOne(Transaction::class);
     }
 }
