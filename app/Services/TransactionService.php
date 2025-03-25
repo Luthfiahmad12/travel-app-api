@@ -7,18 +7,17 @@ use App\Repositories\TransactionRepository;
 
 class TransactionService
 {
-    public function __construct(protected TransactionRepository $transactionRepository)
-    {
-        \Midtrans\Config::$serverKey = config('midtrans.server_key');
-        \Midtrans\Config::$isProduction = config('midtrans.is_production');
-        \Midtrans\Config::$isSanitized = true;
-        \Midtrans\Config::$is3ds = true;
+    public function __construct(
+        protected TransactionRepository $transactionRepository,
+        protected MidtransService $midtransService
+    ) {
+        //
     }
 
     public function create(?Booking $booking)
     {
         $transaction_id = 'TRX-' . uniqid();
-        $payment_token = $this->createToken($booking);
+        $payment_token = $this->midtransService->createSnapToken($booking);
 
         return $this->transactionRepository->create([
             'booking_id' => $booking->id,
@@ -28,27 +27,49 @@ class TransactionService
         ]);
     }
 
-    protected function createToken(?Booking $booking)
+    public function midtransCallback()
     {
-        $params = [
-            'transaction_details' => [
-                'order_id' => rand(),
-                'gross_amount' => $booking->total_price,
-            ],
-            'customer_details' => [
-                'first_name' => $booking->passenger->name,
-                'last_name' => '',
-                'email' => $booking->passenger->email,
-                'phone' => $booking->passenger->phone_number,
-            ],
-            'items_details' => [
-                'id' => 'code-' . rand(),
-                'price' => $booking->schedule->price,
-                'quantity' => $booking->qty,
-                'name' => $booking->schedule->travel_name
-            ]
-        ];
+        if ($this->midtransService->isSignatureKeyVerified()) {
+            $transaction = $this->midtransService->getTransaction();
 
-        return  \Midtrans\Snap::getSnapToken($params);
+            if ($this->midtransService->getStatus() == 'success') {
+                $transaction->update([
+                    'payment_status' => 'paid',
+                    'payment_date' => now()
+                ]);
+
+                $booking = $transaction->booking()->first();
+                $booking->update([
+                    'status' => 'paid',
+                ]);
+            }
+            if ($this->midtransService->getStatus() == 'pending') {
+                // lakukan sesuatu jika pembayaran masih pending, seperti mengirim notifikasi ke customer
+                // bahwa pembayaran masih pending dan harap selesai pembayarannya
+            }
+
+            if ($this->midtransService->getStatus() == 'expire') {
+                $transaction->update([
+                    'payment_status' => 'expired'
+                ]);
+            }
+
+            if ($this->midtransService->getStatus() == 'cancel') {
+                // lakukan sesuatu jika pembayaran dibatalkan
+                $transaction->update([
+                    'payment_status' => 'cancel'
+                ]);
+            }
+
+            if ($this->midtransService->getStatus() == 'failed') {
+                // lakukan sesuatu jika pembayaran gagal
+                $transaction->update([
+                    'payment_status' => 'failed'
+                ]);
+            }
+            return SuccessResponse('Pembayaran berhasil di proses', 201);
+        } else {
+            return ErrorResponse('Unauthorized', 401);
+        }
     }
 }

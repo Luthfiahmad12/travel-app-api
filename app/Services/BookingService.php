@@ -52,6 +52,7 @@ class BookingService
 
             $booking = $this->bookingRepository->create($data);
             if ($booking) {
+
                 $this->transactionService->create($booking);
             }
 
