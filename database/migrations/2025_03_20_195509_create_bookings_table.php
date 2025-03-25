@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('schedule_id')->constrained()->cascadeOnDelete();
             $table->integer('qty');
             $table->decimal('total_price', 10, 2);
+            $table->string('status')->default('pending');
             $table->softDeletes();
             $table->timestamps();
         });

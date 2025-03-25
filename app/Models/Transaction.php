@@ -14,7 +14,7 @@ class Transaction extends Model
         'transaction_id',
         'payment_token',
         'payment_type',
-        'amount',
+        'gross_amount',
         'transaction_status', // paid, pending, failed.
         'payment_date'
     ];

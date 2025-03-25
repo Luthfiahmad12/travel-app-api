@@ -12,7 +12,8 @@ class BookingService
 {
     public function __construct(
         protected ScheduleRepository $scheduleRepository,
-        protected BookingRepository $bookingRepository
+        protected BookingRepository $bookingRepository,
+        protected TransactionService $transactionService
     ) {
         //
     }
@@ -50,6 +51,9 @@ class BookingService
             $data['total_price'] = $schedule->price * $data['qty'];
 
             $booking = $this->bookingRepository->create($data);
+            if ($booking) {
+                $this->transactionService->create($booking);
+            }
 
             return $booking->load('schedule', 'passenger', 'transaction');
         }

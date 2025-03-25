@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Booking;
-use Illuminate\Support\Facades\Auth;
 
 class BookingRepository
 {
@@ -12,7 +11,7 @@ class BookingRepository
         return Booking::all();
     }
 
-    public function create(array $data)
+    public function create(array $data): Booking
     {
         return Booking::create($data);
     }
